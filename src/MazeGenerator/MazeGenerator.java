@@ -8,8 +8,10 @@ public class MazeGenerator extends  JFrame{
 
     public MazeGenerator() {
         JButton generate = new JButton("Generate");
-
+        JButton changeSize = new JButton("Change size");
+        changeSize.setSize(50,50);
         generate.setSize(50,50);
+
         JFrame frame = new JFrame("Maze Generator");
         Container pane = frame.getContentPane();
         frame.setSize(650,600);
