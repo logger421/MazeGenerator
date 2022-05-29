@@ -1,19 +1,21 @@
 package MazeGenerator;
 
 import javax.swing.*;
+import java.awt.*;
 
 
 public class MazeGenerator extends  JFrame{
 
     public MazeGenerator() {
         JButton generate = new JButton("Generate");
+
         generate.setSize(50,50);
         JFrame frame = new JFrame("Maze Generator");
+        Container pane = frame.getContentPane();
         frame.setSize(650,600);
-
         Maze maze = new Maze();
-        //frame.setSize(maze.getSize());
-        frame.add(maze);
+        frame.add(maze, BorderLayout.CENTER);
+        frame.add(generate, BorderLayout.NORTH);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);

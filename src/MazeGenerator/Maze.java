@@ -21,15 +21,16 @@ public class Maze extends Canvas {
         What's important is that every cell is a path,
         and we build or destroy wall between them
      */
-    public final static int WIDTH = 30;
-    public final static int HEIGHT = 30;
+    public final static int WIDTH = 10;
+    public final static int HEIGHT = 10;
     private final static Random rand = new Random();
     private int step = 0;
     private List<Path> maze = new ArrayList<>();
 
 
     public Maze() {
-        this.setSize(600, 600);
+        this.setSize(WIDTH*Cell.WIDTH+5, HEIGHT*Cell.HEIGHT+5);
+        // this.setBackground(Color.GRAY);
         generate();
     }
 
@@ -50,11 +51,11 @@ public class Maze extends Canvas {
 
         visited.add(0); // start in left upper corner
         /*
-            As prim's algorithm state we should
-            add all not visited neighbours of current
-            cell to list to go to them. We do it manually
-            to initialise whole process.
-            Here we add right neighbour of current cell, and below:
+        As prim's algorithm state we should
+        add all not visited neighbours of current
+        cell to list to go to them. We do it manually
+        to initialise whole process.
+        Here we add right neighbour of current cell, and below:
          */
         toVisit.add(new Path(0, 1));
         toVisit.add(new Path(0, WIDTH));
@@ -68,20 +69,8 @@ public class Maze extends Canvas {
 
             visited.add(nextCell.end);
             addToMaze(nextCell);
-
-            if( nextCell.ABOVE > 0 && !visited.contains(nextCell.ABOVE))
-                toVisit.add(new Path(nextCell.end, nextCell.ABOVE));
-
-            if( nextCell.BELOW < WIDTH*HEIGHT && !visited.contains(nextCell.BELOW))
-                toVisit.add(new Path(nextCell.end, nextCell.BELOW));
-
-            if( nextCell.RIGHT % WIDTH != 0 && !visited.contains(nextCell.RIGHT))
-                toVisit.add(new Path(nextCell.end, nextCell.RIGHT));
-
-            if( nextCell.LEFT % WIDTH != WIDTH -1 && !visited.contains(nextCell.LEFT))
-                toVisit.add(new Path(nextCell.end, nextCell.LEFT));
+            checkNeigbours(nextCell, visited, toVisit);
         }
-
         // delay
         Timer timer = new Timer(50, (e) ->
         {
@@ -90,6 +79,26 @@ public class Maze extends Canvas {
         });
         timer.setRepeats(true);
         timer.start();
+    }
+
+    /*
+    This method checks the same thing we did with starting cell,
+    we look for neighbours to find next cell which we can go to,
+    if we not visited it yet. So we go Left, Right, Above or Below
+    from our current cell we are in.
+     */
+    private void checkNeigbours(Path nextCell, List<Integer> visited, List<Path> toVisit) {
+        if( nextCell.ABOVE > 0 && !visited.contains(nextCell.ABOVE) )
+            toVisit.add(new Path(nextCell.end, nextCell.ABOVE));
+
+        if( nextCell.BELOW < WIDTH*HEIGHT && !visited.contains(nextCell.BELOW) )
+            toVisit.add(new Path(nextCell.end, nextCell.BELOW));
+
+        if( nextCell.RIGHT % WIDTH != 0 && !visited.contains(nextCell.RIGHT) )
+            toVisit.add(new Path(nextCell.end, nextCell.RIGHT));
+
+        if( nextCell.LEFT % WIDTH != WIDTH -1 && !visited.contains(nextCell.LEFT) )
+            toVisit.add( new Path(nextCell.end, nextCell.LEFT) );
     }
 
     @Override
@@ -123,13 +132,13 @@ public class Maze extends Canvas {
         (bottom to up, up to bottom) so we do
         a flip of path coordinates.
      */
-
     private void addToMaze(Path e) {
         if(e.start > e.end)
             maze.add(new Path(e.end, e.start));
         else
             maze.add(e);
     }
+
     public void step()
     {
         step++;
