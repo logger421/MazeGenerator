@@ -1,5 +1,7 @@
 package MazeGenerator;
 
+import java.util.Objects;
+
 public class Edge {
     int start;
     int end;
@@ -15,5 +17,18 @@ public class Edge {
             return false;
         Edge e = (Edge) obj;
         return this.start == e.start && this.end == e.end;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(start, end);
+    }
+
+    @Override
+    public String toString() {
+        return "Edge{" +
+                "start=" + start +
+                ", end=" + end +
+                '}';
     }
 }
