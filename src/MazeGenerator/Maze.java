@@ -21,8 +21,8 @@ public class Maze extends Canvas {
         What's important is that every cell is a path,
         and we build or destroy wall between them
      */
-    public final static int WIDTH = 10;
-    public final static int HEIGHT = 10;
+    public final static int WIDTH = 20;
+    public final static int HEIGHT = 20;
     private final static Random rand = new Random();
     private int step = 0;
     private List<Path> maze = new ArrayList<>();
@@ -108,7 +108,7 @@ public class Maze extends Canvas {
         g.drawLine(0,0, 0, HEIGHT*Cell.HEIGHT);
         g.drawLine(0, HEIGHT*Cell.HEIGHT, WIDTH*Cell.WIDTH, HEIGHT*Cell.HEIGHT);
         g.drawLine(WIDTH*Cell.WIDTH, 0, WIDTH*Cell.WIDTH, HEIGHT*Cell.HEIGHT);
-
+        g.setColor(Color.BLUE);
         List<Path> mazeSteps = maze.subList(0,step);
         // drawing the maze:
         for(int y = 0; y < HEIGHT; y++)

@@ -7,17 +7,26 @@ import java.awt.*;
 public class MazeGenerator extends  JFrame{
 
     public MazeGenerator() {
-        JButton generate = new JButton("Generate");
-        JButton changeSize = new JButton("Change size");
-        changeSize.setSize(50,50);
-        generate.setSize(50,50);
-
         JFrame frame = new JFrame("Maze Generator");
-        Container pane = frame.getContentPane();
         frame.setSize(650,600);
+
+        JPanel buttons = new JPanel();
+        JPanel mazeFrame = new JPanel();
+
+        buttons.setBackground(Color.GRAY);
+        JButton generate = new JButton("   Generate  ");
+        JButton changeSize = new JButton("Change size");
+        buttons.setLayout(new BoxLayout( buttons, BoxLayout.PAGE_AXIS));
+        changeSize.setSize(120,70);
+        generate.setSize(170,70);
+        buttons.add(generate);
+        buttons.add(changeSize);
+
         Maze maze = new Maze();
-        frame.add(maze, BorderLayout.CENTER);
-        frame.add(generate, BorderLayout.NORTH);
+        mazeFrame.add(maze);
+
+        frame.add(mazeFrame, BorderLayout.CENTER);
+        frame.add(buttons, BorderLayout.EAST);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
