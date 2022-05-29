@@ -21,11 +21,11 @@ public class Maze extends Canvas {
         What's important is that every cell is a path,
         and we build or destroy wall between them
      */
-    private final static int WIDTH = 30;
-    private final static int HEIGHT = 30;
+    public final static int WIDTH = 30;
+    public final static int HEIGHT = 30;
     private final static Random rand = new Random();
     private int step = 0;
-    private List<Edge> maze = new ArrayList<>();
+    private List<Path> maze = new ArrayList<>();
 
 
     public Maze() {
@@ -46,7 +46,7 @@ public class Maze extends Canvas {
      */
     public void generate() {
         List<Integer> visited = new ArrayList<>();
-        List<Edge> toVisit = new ArrayList<Edge>();
+        List<Path> toVisit = new ArrayList<Path>();
 
         visited.add(0); // start in left upper corner
         /*
@@ -56,12 +56,12 @@ public class Maze extends Canvas {
             to initialise whole process.
             Here we add right neighbour of current cell, and below:
          */
-        toVisit.add(new Edge(0, 1));
-        toVisit.add(new Edge(0, WIDTH));
+        toVisit.add(new Path(0, 1));
+        toVisit.add(new Path(0, WIDTH));
 
         while(toVisit.size() > 0) {
             int nextIndex = rand.nextInt(toVisit.size());
-            Edge nextCell = toVisit.remove(nextIndex);
+            Path nextCell = toVisit.remove(nextIndex);
 
             if(visited.contains(nextCell.end))
                 continue;
@@ -69,38 +69,27 @@ public class Maze extends Canvas {
             visited.add(nextCell.end);
             addToMaze(nextCell);
 
-            int above = nextCell.end - WIDTH;
-            if( above > 0 && !visited.contains(above))
-                toVisit.add(new Edge(nextCell.end, above));
+            if( nextCell.ABOVE > 0 && !visited.contains(nextCell.ABOVE))
+                toVisit.add(new Path(nextCell.end, nextCell.ABOVE));
 
-            int below = nextCell.end + WIDTH;
-            if( below < WIDTH*HEIGHT && !visited.contains(below))
-                toVisit.add(new Edge(nextCell.end, below));
+            if( nextCell.BELOW < WIDTH*HEIGHT && !visited.contains(nextCell.BELOW))
+                toVisit.add(new Path(nextCell.end, nextCell.BELOW));
 
-            int right = nextCell.end + 1;
-            if( right % WIDTH != 0 && !visited.contains(right))
-                toVisit.add(new Edge(nextCell.end, right));
+            if( nextCell.RIGHT % WIDTH != 0 && !visited.contains(nextCell.RIGHT))
+                toVisit.add(new Path(nextCell.end, nextCell.RIGHT));
 
-            int left = nextCell.end - 1;
-            if( left % WIDTH != WIDTH -1 && !visited.contains(left))
-                toVisit.add(new Edge(nextCell.end, left));
+            if( nextCell.LEFT % WIDTH != WIDTH -1 && !visited.contains(nextCell.LEFT))
+                toVisit.add(new Path(nextCell.end, nextCell.LEFT));
         }
 
         // delay
-//        Timer timer = new Timer(150, (e) ->
-//        {
-//            step();
-//            Maze.this.repaint();
-//        });
-//        timer.setRepeats(true);
-//        timer.start();
-    }
-
-    public void step()
-    {
-        step++;
-        if(step >= maze.size())
-            step = maze.size() - 1;
+        Timer timer = new Timer(50, (e) ->
+        {
+            step();
+            Maze.this.repaint();
+        });
+        timer.setRepeats(true);
+        timer.start();
     }
 
     @Override
@@ -111,21 +100,21 @@ public class Maze extends Canvas {
         g.drawLine(0, HEIGHT*Cell.HEIGHT, WIDTH*Cell.WIDTH, HEIGHT*Cell.HEIGHT);
         g.drawLine(WIDTH*Cell.WIDTH, 0, WIDTH*Cell.WIDTH, HEIGHT*Cell.HEIGHT);
 
+        List<Path> mazeSteps = maze.subList(0,step);
         // drawing the maze:
         for(int y = 0; y < HEIGHT; y++)
             for (int x = 0; x < WIDTH; x++) {
                 // horizontal lines drawing:
                 int current = (y * WIDTH) + x;
                 int below = ((y + 1) * WIDTH) + x;
-                if (!maze.contains(new Edge(current, below)))
+                if (!mazeSteps.contains(new Path(current, below)))
                     g.drawLine(x * Cell.WIDTH, (y + 1) * Cell.HEIGHT, (x + 1) * Cell.WIDTH, (y + 1) * Cell.HEIGHT);
 
                 //vertical lines drawing:
                 int right = current + 1;
-                if (!maze.contains(new Edge(current, right)))
+                if (!mazeSteps.contains(new Path(current, right)))
                     g.drawLine((x + 1) * Cell.WIDTH, y * Cell.HEIGHT, (x + 1) * Cell.WIDTH, (y + 1) * Cell.HEIGHT);
             }
-
     }
 
     /*
@@ -134,10 +123,17 @@ public class Maze extends Canvas {
         (bottom to up, up to bottom) so we do
         a flip of path coordinates.
      */
-    private void addToMaze(Edge e) {
+
+    private void addToMaze(Path e) {
         if(e.start > e.end)
-            maze.add(new Edge(e.end, e.start));
+            maze.add(new Path(e.end, e.start));
         else
             maze.add(e);
+    }
+    public void step()
+    {
+        step++;
+        if(step >= maze.size())
+            step = maze.size() - 1;
     }
 }
