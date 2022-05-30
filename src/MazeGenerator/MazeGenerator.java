@@ -2,28 +2,57 @@ package MazeGenerator;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 
 public class MazeGenerator extends  JFrame{
+    JFrame frame;
+    JPanel buttons;
+    JPanel mazeFrame;
+    JButton generateButton;
+    JButton changeSizeButton;
+    JButton resetButton;
+    Maze maze;
 
     public MazeGenerator() {
-        JFrame frame = new JFrame("Maze Generator");
+        frame = new JFrame("Maze Generator");
         frame.setSize(650,600);
 
-        JPanel buttons = new JPanel();
-        JPanel mazeFrame = new JPanel();
-
-        buttons.setBackground(Color.GRAY);
-        JButton generate = new JButton("   Generate  ");
-        JButton changeSize = new JButton("Change size");
-        buttons.setLayout(new BoxLayout( buttons, BoxLayout.PAGE_AXIS));
-        changeSize.setSize(120,70);
-        generate.setSize(170,70);
-        buttons.add(generate);
-        buttons.add(changeSize);
-
-        Maze maze = new Maze();
+        mazeFrame = new JPanel();
+        maze = new Maze();
         mazeFrame.add(maze);
+
+        buttons = new JPanel();
+        buttons.setBackground(Color.LIGHT_GRAY);
+        buttons.setLayout(new BoxLayout( buttons, BoxLayout.PAGE_AXIS));
+
+        generateButton = new JButton("   Generate  ");
+        generateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                maze.generate();
+            }
+        });
+        resetButton = new JButton("    RESET    ");
+        resetButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.remove(mazeFrame);
+                mazeFrame.remove(maze);
+                maze = new Maze();
+                mazeFrame.add(maze);
+                frame.add(mazeFrame, BorderLayout.CENTER);
+                frame.pack();
+                repaint();
+                revalidate();
+            }
+        });
+        changeSizeButton = new JButton("Change size");
+
+        buttons.add(generateButton);
+        buttons.add(changeSizeButton);
+        buttons.add(resetButton);
 
         frame.add(mazeFrame, BorderLayout.CENTER);
         frame.add(buttons, BorderLayout.EAST);

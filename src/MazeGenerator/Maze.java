@@ -30,8 +30,6 @@ public class Maze extends Canvas {
 
     public Maze() {
         this.setSize(WIDTH*Cell.WIDTH+5, HEIGHT*Cell.HEIGHT+5);
-        // this.setBackground(Color.GRAY);
-        generate();
     }
 
     /*
