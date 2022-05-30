@@ -5,14 +5,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
 public class MazeGenerator extends  JFrame{
     JFrame frame;
     JPanel buttons;
     JPanel mazeFrame;
     JButton generateButton;
-    JButton changeSizeButton;
     JButton resetButton;
+    JTextField sizeNumber;
     Maze maze;
 
     public MazeGenerator() {
@@ -48,14 +47,22 @@ public class MazeGenerator extends  JFrame{
                 revalidate();
             }
         });
-        changeSizeButton = new JButton("Change size");
+        JLabel setNewSizeLabel = new JLabel("Enter size: ");
+        JTextField setMazeSize = new JTextField(2);
+
+        JPanel textPanel = new JPanel();
+        textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.PAGE_AXIS));
+
+        textPanel.add(setNewSizeLabel);
+        textPanel.add(setMazeSize);
 
         buttons.add(generateButton);
-        buttons.add(changeSizeButton);
         buttons.add(resetButton);
+        //buttons.add(textPanel);
 
         frame.add(mazeFrame, BorderLayout.CENTER);
         frame.add(buttons, BorderLayout.EAST);
+        frame.add(textPanel, BorderLayout.PAGE_START);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
