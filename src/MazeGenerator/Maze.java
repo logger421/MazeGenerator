@@ -21,8 +21,8 @@ public class Maze extends Canvas {
         What's important is that every cell is a path,
         and we build or destroy wall between them
      */
-    public final static int WIDTH = 20;
-    public final static int HEIGHT = 20;
+    public static int WIDTH = 30;
+    public static int HEIGHT = 30;
     private final static Random rand = new Random();
     private int step = 0;
     private List<Path> maze = new ArrayList<>();
@@ -32,6 +32,11 @@ public class Maze extends Canvas {
         this.setSize(WIDTH*Cell.WIDTH+5, HEIGHT*Cell.HEIGHT+5);
     }
 
+    public Maze(int W, int H) {
+        this.WIDTH = W;
+        this.HEIGHT = H;
+        this.setSize(WIDTH*Cell.WIDTH+5, HEIGHT*Cell.HEIGHT+5);
+    }
     /*
         We will store our paths in 1 dimention array,
         which means if we chave 10x10 cells our vector

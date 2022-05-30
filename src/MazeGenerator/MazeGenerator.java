@@ -11,7 +11,6 @@ public class MazeGenerator extends  JFrame{
     JPanel mazeFrame;
     JButton generateButton;
     JButton resetButton;
-    JTextField sizeNumber;
     Maze maze;
 
     public MazeGenerator() {
@@ -24,16 +23,18 @@ public class MazeGenerator extends  JFrame{
 
         buttons = new JPanel();
         buttons.setBackground(Color.LIGHT_GRAY);
-        buttons.setLayout(new BoxLayout( buttons, BoxLayout.PAGE_AXIS));
+        buttons.setLayout(new FlowLayout());
 
-        generateButton = new JButton("   Generate  ");
+        generateButton = new JButton("Generate");
+
         generateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 maze.generate();
             }
         });
-        resetButton = new JButton("    RESET    ");
+        resetButton = new JButton("Reset");
+
         resetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -47,22 +48,31 @@ public class MazeGenerator extends  JFrame{
                 revalidate();
             }
         });
-        JLabel setNewSizeLabel = new JLabel("Enter size: ");
-        JTextField setMazeSize = new JTextField(2);
 
-        JPanel textPanel = new JPanel();
-        textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.PAGE_AXIS));
-
-        textPanel.add(setNewSizeLabel);
-        textPanel.add(setMazeSize);
+        JLabel enterSize = new JLabel("Enter new size: ");
+        JTextField enterNumber = new JTextField(5);
+        enterNumber.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String text = enterNumber.getText();
+                Integer newSize = Integer.parseInt(text);
+                frame.remove(mazeFrame);
+                mazeFrame.remove(maze);
+                maze = new Maze(newSize, newSize);
+                mazeFrame.add(maze);
+                frame.add(mazeFrame, BorderLayout.CENTER);
+                frame.pack();
+                repaint();
+                revalidate();
+            }
+        });
 
         buttons.add(generateButton);
         buttons.add(resetButton);
-        //buttons.add(textPanel);
-
+        buttons.add(enterSize);
+        buttons.add(enterNumber);
         frame.add(mazeFrame, BorderLayout.CENTER);
-        frame.add(buttons, BorderLayout.EAST);
-        frame.add(textPanel, BorderLayout.PAGE_START);
+        frame.add(buttons, BorderLayout.NORTH);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
